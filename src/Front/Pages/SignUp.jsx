@@ -1,44 +1,41 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig"; // นำเข้า Firebase Authentication
-import { Link } from "react-router-dom"; // นำเข้า Link
+import { auth } from "../../Back/firebaseConfig";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const [username, setUsername] = useState(""); // ชื่อผู้ใช้
-  const [firstName, setFirstName] = useState(""); // ชื่อ
-  const [lastName, setLastName] = useState(""); // นามสกุล
-  const [email, setEmail] = useState(""); // อีเมล
-  const [password, setPassword] = useState(""); // รหัสผ่าน
-  const [confirmPassword, setConfirmPassword] = useState(""); // ยืนยันรหัสผ่าน
-  const [verificationCode, setVerificationCode] = useState(""); // รหัส 4 หลัก
-  const [error, setError] = useState(""); // ข้อผิดพลาด
-  const [loading, setLoading] = useState(false); // สถานะการโหลด
-  const [passwordVisible, setPasswordVisible] = useState(false); // สถานะการแสดงรหัสผ่าน
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); // สถานะการแสดงยืนยันรหัสผ่าน
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [success, setSuccess] = useState(false); // สำหรับป๊อปอัปแจ้งเตือน
+
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // ตรวจสอบว่ารหัสผ่านและยืนยันรหัสผ่านตรงกันหรือไม่
     if (password !== confirmPassword) {
       setError("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
       setLoading(false);
       return;
     }
 
-    // ตรวจสอบว่ารหัส 4 หลักตรงกับรูปแบบที่ต้องการ (ในที่นี้ให้มีเฉพาะตัวเลข 4 หลัก)
-    if (!/^\d{4}$/.test(verificationCode)) {
-      setError("กรุณากรอกรหัส 4 หลักที่ถูกต้อง");
-      setLoading(false);
-      return;
-    }
-
     try {
-      // สมัครสมาชิกด้วย Firebase Authentication
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("สมัครสมาชิกสำเร็จ!");
+      setSuccess(true); // แสดงป๊อปอัป
+      setTimeout(() => {
+        setSuccess(false); // ซ่อนป๊อปอัปหลัง 3 วินาที
+        navigate("/login");
+      }, 3000);
     } catch (err) {
       setError("เกิดข้อผิดพลาด: " + err.message);
     }
@@ -48,13 +45,22 @@ const SignUp = () => {
 
   return (
     <div className="container mx-auto py-20">
-      <form onSubmit={handleSignUp} className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+      {/* ป๊อปอัปแจ้งเตือน */}
+      {success && (
+        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg flex items-center gap-2">
+          <span className="material-icons text-xl">check_circle</span>
+          <p>สมัครสมาชิกสำเร็จ!</p>
+        </div>
+      )}
+
+      <form
+        onSubmit={handleSignUp}
+        className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
+      >
         <h2 className="text-2xl font-semibold text-center mb-4">สมัครสมาชิก</h2>
-        
-        {/* ข้อผิดพลาด */}
+
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
-        {/* ชื่อผู้ใช้ */}
         <div className="mb-4">
           <label className="block text-gray-700">ชื่อผู้ใช้</label>
           <input
@@ -66,7 +72,6 @@ const SignUp = () => {
           />
         </div>
 
-        {/* ชื่อ */}
         <div className="mb-4">
           <label className="block text-gray-700">ชื่อ</label>
           <input
@@ -78,7 +83,6 @@ const SignUp = () => {
           />
         </div>
 
-        {/* นามสกุล */}
         <div className="mb-4">
           <label className="block text-gray-700">นามสกุล</label>
           <input
@@ -90,7 +94,6 @@ const SignUp = () => {
           />
         </div>
 
-        {/* อีเมล */}
         <div className="mb-4">
           <label className="block text-gray-700">อีเมล</label>
           <input
@@ -102,7 +105,6 @@ const SignUp = () => {
           />
         </div>
 
-        {/* รหัสผ่าน */}
         <div className="mb-4">
           <label className="block text-gray-700">รหัสผ่าน</label>
           <div className="relative">
@@ -123,7 +125,6 @@ const SignUp = () => {
           </div>
         </div>
 
-        {/* ยืนยันรหัสผ่าน */}
         <div className="mb-4">
           <label className="block text-gray-700">ยืนยันรหัสผ่าน</label>
           <div className="relative">
@@ -142,25 +143,11 @@ const SignUp = () => {
               {confirmPasswordVisible ? "ซ่อน" : "แสดง"}
             </button>
           </div>
-          {/* ตรวจสอบการตรงกันของรหัสผ่าน */}
           {password && confirmPassword && password !== confirmPassword && (
             <div className="text-red-500 text-sm mt-1">รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน</div>
           )}
         </div>
 
-        {/* รหัส 4 หลัก */}
-        <div className="mb-4">
-          <label className="block text-gray-700">รหัส 4 หลัก</label>
-          <input
-            type="text"
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        {/* ปุ่มสมัครสมาชิก */}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
@@ -169,7 +156,6 @@ const SignUp = () => {
           {loading ? "กำลังสมัคร..." : "สมัครสมาชิก"}
         </button>
 
-        {/* ลิงก์ไปที่หน้าเข้าสู่ระบบ */}
         <p className="mt-4 text-center">
           มีบัญชีอยู่แล้ว? <Link to="/login" className="text-blue-500">เข้าสู่ระบบ</Link>
         </p>

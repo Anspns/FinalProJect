@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../firebaseConfig"; // นำเข้า Firebase Authentication
+import { auth } from "../../Back/firebaseConfig"; // นำเข้า Firebase Authentication
 import { Link } from "react-router-dom"; // นำเข้า Link
 
 const ForgotPassword = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig"; // นำเข้า Firebase Authentication
+import { auth } from "../../Back/firebaseConfig"; // นำเข้า Firebase Authentication
 import { Link, useNavigate } from "react-router-dom"; // นำเข้า useNavigate
 
 const Login = () => {
