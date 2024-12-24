@@ -6,13 +6,13 @@ import { getFirestore } from "firebase/firestore"; // Firestore สำหรั�
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAncco3_XyE4_5iTCeWrZiPrgbhPv17nZQ",
-  authDomain: "project-3e034.firebaseapp.com",
-  projectId: "project-3e034",
-  storageBucket: "project-3e034.appspot.com",
-  messagingSenderId: "208756652132",
-  appId: "1:208756652132:web:d56f0cb60164de8ebf0771",
-  measurementId: "G-H8NCDBCYE1"
+  apiKey: "AIzaSyCfQ9qexu9Tn5hlH2MF_POXOZuECT0nWqA",
+  authDomain: "finalproject-6cbfb.firebaseapp.com",
+  projectId: "finalproject-6cbfb",
+  storageBucket: "finalproject-6cbfb.firebasestorage.app",
+  messagingSenderId: "507794764850",
+  appId: "1:507794764850:web:01f45eb0fb89cbe72c782b",
+  measurementId: "G-TCY9BW74QD"
 };
 
 // Initialize Firebase
