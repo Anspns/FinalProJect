@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../Back/firebaseConfig";
+import { auth } from "../../Back/Auth";
 import { Link, useNavigate } from "react-router-dom";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import db from "../../Back/Firestore";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -14,7 +16,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [success, setSuccess] = useState(false); // สำหรับป๊อปอัปแจ้งเตือน
+  const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,6 +25,18 @@ const SignUp = () => {
     setLoading(true);
     setError("");
 
+    if (!username || !firstName || !lastName || !email || !password || !confirmPassword) {
+      setError("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+      setLoading(false);
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
       setLoading(false);
@@ -30,14 +44,34 @@ const SignUp = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      setSuccess(true); // แสดงป๊อปอัป
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // บันทึกข้อมูลผู้ใช้ลง Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        username,
+        firstName,
+        lastName,
+        createdAt: serverTimestamp(),
+      });
+
+      setSuccess(true);
       setTimeout(() => {
-        setSuccess(false); // ซ่อนป๊อปอัปหลัง 3 วินาที
+        setSuccess(false);
         navigate("/login");
-      }, 3000);
+      }, 500);
     } catch (err) {
-      setError("เกิดข้อผิดพลาด: " + err.message);
+      console.log(err);
+      if (err.code === "auth/email-already-in-use") {
+        setError("อีเมลนี้ถูกใช้งานแล้ว");
+      } else if (err.code === "auth/invalid-email") {
+        setError("รูปแบบอีเมลไม่ถูกต้อง");
+      } else if (err.code === "auth/weak-password") {
+        setError("รหัสผ่านควรมีอย่างน้อย 6 ตัวอักษร");
+      } else {
+        setError("เกิดข้อผิดพลาด: " + err.message);
+      }
     }
 
     setLoading(false);
@@ -45,11 +79,16 @@ const SignUp = () => {
 
   return (
     <div className="container mx-auto py-20">
-      {/* ป๊อปอัปแจ้งเตือน */}
       {success && (
-        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg flex items-center gap-2">
+        <div className="fixed top-5 right-1/2 transform translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg flex items-center gap-2 z-50 w-[90%] md:w-[30%]">
           <span className="material-icons text-xl">check_circle</span>
           <p>สมัครสมาชิกสำเร็จ!</p>
+          <button
+            onClick={() => setSuccess(false)}
+            className="ml-4 bg-white text-green-500 px-2 py-1 rounded"
+          >
+            ปิด
+          </button>
         </div>
       )}
 
@@ -143,9 +182,6 @@ const SignUp = () => {
               {confirmPasswordVisible ? "ซ่อน" : "แสดง"}
             </button>
           </div>
-          {password && confirmPassword && password !== confirmPassword && (
-            <div className="text-red-500 text-sm mt-1">รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน</div>
-          )}
         </div>
 
         <button

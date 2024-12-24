@@ -11,11 +11,12 @@ import Competition from "./Front/Pages/Competition";
 import RegistrationForm from "./Front/Pages/RegistrationForm";
 import BettaQuality from "./Front/Pages/BettaQuality";
 import History from "./Front/Pages/History";
-
+import { AuthProvider } from "./Context/AuthContext";
 
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Navbar />
       <Routes>
@@ -31,6 +32,7 @@ function App() {
         <Route path="/history" element={<History />} />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

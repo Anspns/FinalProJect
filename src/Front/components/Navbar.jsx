@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "../../Context/AuthContext";  // ดึง useAuth จาก Context
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // สถานะล็อกอิน (ตั้งค่าเป็นจริงเพื่อทดสอบ)
+  const { isLoggedIn, logout } = useAuth();  // ใช้สถานะล็อกอินจาก AuthContext
 
   const navItems = [
     { label: "แนะนำ", href: "/" },
@@ -19,7 +20,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false); // ตัวอย่างการออกจากระบบ
+    logout();  // เรียกฟังก์ชัน logout จาก Context
     alert("ออกจากระบบสำเร็จ");
   };
 

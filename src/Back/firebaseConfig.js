@@ -1,10 +1,6 @@
-// firebase-config.js
+// Back/firebaseConfig.js
+import { initializeApp } from 'firebase/app';
 
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Authentication
-import { getFirestore } from "firebase/firestore"; // Firestore สำหรับเก็บข้อมูล
-
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCfQ9qexu9Tn5hlH2MF_POXOZuECT0nWqA",
   authDomain: "finalproject-6cbfb.firebaseapp.com",
@@ -18,10 +14,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication
-const auth = getAuth(app);
-
-// Initialize Firestore (ถ้าต้องการใช้เก็บข้อมูล)
-const db = getFirestore(app);
-
-export { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider };
+// ส่งออกแอพ Firebase ที่ initialize แล้ว
+export default app;
