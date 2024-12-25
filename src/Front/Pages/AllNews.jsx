@@ -15,19 +15,22 @@ const newsItems = [
 
 const AllNews = () => {
   return (
-    <div className="container mx-auto py-20">
-      <h2 className="text-3xl font-semibold text-center mb-8 text-gray-800">ข่าวสารทั้งหมด</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="container mx-auto py-20 bg-blue-50">
+      <h2 className="text-4xl font-semibold text-center mb-8 text-gray-800">ข่าวสารทั้งหมด</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {newsItems.map((news) => (
-          <div key={news.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+          <div
+            key={news.id}
+            className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
+          >
             <Link to={`/project/${news.id}`}>
               <img
                 src={news.image}
                 alt={`ข่าวสาร ${news.id}`}
-                className="w-full h-32 object-cover"
+                className="w-full h-32 object-cover rounded-t-lg"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-800">{news.title}</h3>
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">{news.title}</h3>
                 <p className="text-gray-600 mt-2">{news.description}</p>
                 <p className="text-gray-400 text-sm mt-2">{news.date}</p>
                 <button className="mt-4 bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600 transition-colors duration-300">

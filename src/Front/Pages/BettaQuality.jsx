@@ -45,20 +45,31 @@ const BettaQuality = () => {
   };
 
   return (
-    <div className="container mx-auto py-20 px-4">
-      <h1 className="text-3xl font-bold text-center mb-6">ประเมินคุณภาพปลากัด</h1>
+    <div className="container mx-auto py-20 px-4 bg-blue-50">
+      <h1 className="text-4xl font-semibold text-center mb-6 text-gray-800">ประเมินคุณภาพปลากัด</h1>
 
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg space-y-4">
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg space-y-6">
         {/* อัปโหลดรูปภาพ */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">อัปโหลดรูปภาพ (3 รูป)</label>
-          <input type="file" accept="image/*" multiple className="block w-full text-gray-700 border border-gray-300 rounded p-2" required />
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
+            required
+          />
         </div>
 
         {/* อัปโหลดวิดีโอ */}
         <div>
           <label className="block text-gray-700 font-medium mb-2">อัปโหลดวิดีโอ (1 วิดีโอ)</label>
-          <input type="file" accept="video/*" className="block w-full text-gray-700 border border-gray-300 rounded p-2" required />
+          <input
+            type="file"
+            accept="video/*"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
+            required
+          />
         </div>
 
         {/* ข้อมูลปลากัด */}
@@ -68,7 +79,7 @@ const BettaQuality = () => {
             type="text"
             value={fishName}
             onChange={(e) => setFishName(e.target.value)}
-            className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
             required
           />
         </div>
@@ -79,7 +90,7 @@ const BettaQuality = () => {
             type="number"
             value={fishAge}
             onChange={(e) => setFishAge(e.target.value)}
-            className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
             required
           />
         </div>
@@ -90,7 +101,7 @@ const BettaQuality = () => {
             type="number"
             value={fishSize}
             onChange={(e) => setFishSize(e.target.value)}
-            className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
             required
           />
           <small className="text-gray-500">จากปากถึงโคนหาง</small>
@@ -102,7 +113,7 @@ const BettaQuality = () => {
           <select
             value={fishType}
             onChange={handleFishTypeChange}
-            className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+            className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
             required
           >
             <option value="">-- เลือกประเภทปลากัด --</option>
@@ -119,7 +130,7 @@ const BettaQuality = () => {
             <select
               value={finType}
               onChange={handleFinTypeChange}
-              className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+              className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
               required
             >
               <option value="">-- เลือกครีบ --</option>
@@ -136,7 +147,7 @@ const BettaQuality = () => {
             <select
               value={tailType}
               onChange={handleTailTypeChange}
-              className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+              className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
               required
             >
               <option value="">-- เลือกประเภทหาง --</option>
@@ -156,7 +167,7 @@ const BettaQuality = () => {
             <select
               value={subTailType}
               onChange={(e) => setSubTailType(e.target.value)}
-              className="block w-full text-gray-700 border border-gray-300 rounded p-2"
+              className="block w-full text-gray-700 border border-gray-300 rounded-lg p-3"
               required
             >
               <option value="">-- เลือกชนิดหาง --</option>
@@ -171,7 +182,7 @@ const BettaQuality = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300"
         >
           ส่งข้อมูล
         </button>

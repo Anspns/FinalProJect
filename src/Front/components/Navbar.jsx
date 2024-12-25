@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useAuth } from "../../Context/AuthContext";  // ดึง useAuth จาก Context
+import { useAuth } from "../../Context/AuthContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isLoggedIn, logout } = useAuth();  // ใช้สถานะล็อกอินจาก AuthContext
+  const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
 
   const navItems = [
     { label: "แนะนำ", href: "/" },
@@ -15,70 +16,66 @@ const Navbar = () => {
     { label: "ประวัติ", href: "/history" },
   ];
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleLogout = () => {
-    logout();  // เรียกฟังก์ชัน logout จาก Context
+    logout();
     alert("ออกจากระบบสำเร็จ");
+    navigate("/");
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-lg z-50">
-      <div className="container mx-auto px-2 py-4 flex justify-between items-center">
-        {/* โลโก้ซ้ายมือ */}
+    <nav className="fixed top-0 left-0 w-full bg-blue-900 shadow-lg z-50">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        {/* Logo */}
         <div className="flex items-center">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center space-x-2">
             <img
               src="https://via.placeholder.com/100x40"
-              alt="Fish"
+              alt="Logo"
               className="h-10 w-10 rounded-full object-cover"
             />
+            <span className="text-white font-bold text-lg">Fish Expo</span>
           </Link>
         </div>
 
-        {/* เมนูหน้าจอใหญ่ */}
-        <div className="hidden lg:flex space-x-6 items-center">
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex space-x-8 items-center">
           {navItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
-              className="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+              className="text-white hover:text-blue-300 transition duration-300 font-medium text-base"
             >
               {item.label}
             </Link>
           ))}
-
-          {/* แสดงเมนูตามสถานะล็อกอิน */}
           {isLoggedIn ? (
             <div className="relative group">
               <button className="flex items-center space-x-2">
                 <img
                   src="https://via.placeholder.com/40"
                   alt="Profile"
-                  className="h-8 w-8 rounded-full object-cover border"
+                  className="h-8 w-8 rounded-full object-cover border-2 border-blue-300"
                 />
-                <span className="text-gray-700 font-medium">โปรไฟล์</span>
+                <span className="text-white font-medium">โปรไฟล์</span>
               </button>
-
-              {/* ดรอปดาวน์เมนู */}
-              <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md hidden group-hover:block">
                 <Link
                   to="/profile"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  className="block px-4 py-2 text-gray-700 hover:bg-blue-100"
                 >
                   ข้อมูลส่วนตัว
                 </Link>
                 <Link
                   to="/change-password"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  className="block px-4 py-2 text-gray-700 hover:bg-blue-100"
                 >
                   เปลี่ยนรหัสผ่าน
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-100"
                 >
                   ออกจากระบบ
                 </button>
@@ -87,86 +84,82 @@ const Navbar = () => {
           ) : (
             <Link
               to="/login"
-              className="text-gray-700 hover:text-blue-600 transition duration-300 font-medium"
+              className="text-white hover:text-blue-300 transition duration-300 font-medium"
             >
               เข้าสู่ระบบ
             </Link>
           )}
         </div>
 
-        {/* ปุ่ม Hamburger สำหรับมือถือ */}
+        {/* Hamburger Menu */}
         <div className="lg:hidden">
           <button
             onClick={toggleMenu}
-            className="text-gray-700 focus:outline-none"
+            className="text-white focus:outline-none"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* เมนูแบบ Slide สำหรับมือถือ */}
-      <div
-        className={`fixed top-0 left-0 w-full h-full bg-white transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
-        } lg:hidden z-40 pt-16`}
-      >
-        <div className="flex flex-col">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className="block py-3 px-6 text-center border-b hover:bg-gray-100"
-              onClick={toggleMenu}
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          {/* เมนูมือถือตามสถานะล็อกอิน */}
-          {isLoggedIn ? (
-            <>
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="fixed top-0 left-0 w-full h-full bg-blue-900 lg:hidden z-40 pt-16">
+          <div className="flex flex-col items-center space-y-4">
+            {navItems.map((item) => (
               <Link
-                to="/profile"
-                className="block py-3 px-6 text-center border-b hover:bg-gray-100"
+                key={item.href}
+                to={item.href}
+                className="block py-3 px-6 text-center text-white hover:bg-blue-800 rounded"
                 onClick={toggleMenu}
               >
-                ข้อมูลส่วนตัว
+                {item.label}
               </Link>
+            ))}
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="block py-3 px-6 text-center text-white hover:bg-blue-800 rounded"
+                  onClick={toggleMenu}
+                >
+                  ข้อมูลส่วนตัว
+                </Link>
+                <Link
+                  to="/change-password"
+                  className="block py-3 px-6 text-center text-white hover:bg-blue-800 rounded"
+                  onClick={toggleMenu}
+                >
+                  เปลี่ยนรหัสผ่าน
+                </Link>
+                <button
+                  onClick={() => {
+                    toggleMenu();
+                    handleLogout();
+                  }}
+                  className="block w-full py-3 px-6 text-center text-white hover:bg-blue-800 rounded"
+                >
+                  ออกจากระบบ
+                </button>
+              </>
+            ) : (
               <Link
-                to="/change-password"
-                className="block py-3 px-6 text-center border-b hover:bg-gray-100"
+                to="/login"
+                className="block py-3 px-6 text-center text-white hover:bg-blue-800 rounded"
                 onClick={toggleMenu}
               >
-                เปลี่ยนรหัสผ่าน
+                เข้าสู่ระบบ
               </Link>
-              <button
-                onClick={() => {
-                  toggleMenu();
-                  handleLogout();
-                }}
-                className="block w-full py-3 px-6 text-center border-b hover:bg-gray-100 text-gray-700"
-              >
-                ออกจากระบบ
-              </button>
-            </>
-          ) : (
-            <Link
-              to="/login"
-              className="block py-3 px-6 text-center border-b hover:bg-gray-100"
-              onClick={toggleMenu}
-            >
-              เข้าสู่ระบบ
-            </Link>
-          )}
+            )}
+          </div>
+          <button
+            onClick={toggleMenu}
+            className="absolute top-4 right-4 text-white"
+          >
+            <X size={24} />
+          </button>
         </div>
-        <button
-          onClick={toggleMenu}
-          className="absolute top-4 right-4 text-gray-700"
-        >
-          <X size={24} />
-        </button>
-      </div>
+      )}
     </nav>
   );
 };

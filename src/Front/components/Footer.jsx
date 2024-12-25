@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom"; // ใช้ Link แทนการใช้ anchor tag
+import { Link } from "react-router-dom";
 
-// ข้อมูลโปสเตอร์
 const posters = [
   { id: 1, image: "https://via.placeholder.com/800x400", title: "โปสเตอร์ 1" },
   { id: 2, image: "https://via.placeholder.com/800x400", title: "โปสเตอร์ 2" },
@@ -14,7 +13,6 @@ const posters = [
   { id: 8, image: "https://via.placeholder.com/800x400", title: "โปสเตอร์ 8" },
 ];
 
-// ข้อมูลข่าวสารแนะนำ
 const newsItems = [
   { id: 1, image: "https://via.placeholder.com/150x75", title: "ข่าวสาร 1", description: "คำอธิบายของข่าวสาร 1", date: "2024-12-01" },
   { id: 2, image: "https://via.placeholder.com/150x75", title: "ข่าวสาร 2", description: "คำอธิบายของข่าวสาร 2", date: "2024-12-02" },
@@ -30,7 +28,6 @@ const Footer = () => {
   const [currentPosterIndex, setCurrentPosterIndex] = useState(0);
   const [direction, setDirection] = useState(null);
 
-  // สไลด์อัตโนมัติ
   useEffect(() => {
     const interval = setInterval(() => {
       setDirection("next");
@@ -53,18 +50,16 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-50 py-20 md:py-20">
-      <div className="container mx-auto px-4">
-        <div className="relative flex items-center justify-center">
-          {/* ปุ่มเลื่อนซ้าย */}
+    <footer className="bg-blue-100 py-12 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative flex items-center justify-center mt-8">
           <button
             onClick={prevPoster}
-            className="absolute left-0 z-20 bg-white/80 hover:bg-white shadow-md p-2 rounded-full transition-all duration-300 transform hover:scale-110"
+            className="absolute left-0 z-20 bg-white/90 hover:bg-white shadow-md p-3 rounded-full transition-all duration-300 transform hover:scale-110"
           >
             <ChevronLeft className="text-gray-700" />
           </button>
 
-          {/* คอนเทนเนอร์โปสเตอร์ */}
           <div className="w-full max-w-screen-xl relative overflow-hidden rounded-xl shadow-lg">
             <div
               className="flex transition-all duration-700 ease-in-out"
@@ -89,16 +84,14 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* ปุ่มเลื่อนขวา */}
           <button
             onClick={nextPoster}
-            className="absolute right-0 z-20 bg-white/80 hover:bg-white shadow-md p-2 rounded-full transition-all duration-300 transform hover:scale-110"
+            className="absolute right-0 z-20 bg-white/90 hover:bg-white shadow-md p-3 rounded-full transition-all duration-300 transform hover:scale-110"
           >
             <ChevronRight className="text-gray-700" />
           </button>
         </div>
 
-        {/* จุดไข่ปลา */}
         <div className="flex justify-center mt-6">
           {posters.map((_, index) => (
             <button
@@ -113,10 +106,9 @@ const Footer = () => {
           ))}
         </div>
 
-        {/* ข่าวสารแนะนำ */}
         <div className="mt-12">
           <h2 className="text-3xl font-semibold text-center mb-8 text-gray-800">ข่าวสารแนะนำ</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {newsItems.map((news) => (
               <div key={news.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
                 <Link to={`/project/${news.id}`}>
